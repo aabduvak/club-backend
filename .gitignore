@@ -3,7 +3,8 @@
 *.pyc
 __pycache__
 media
-files
+uploads
+db.sqlite3
 
 # Environments 
 .env 
