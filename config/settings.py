@@ -40,7 +40,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", ".vercel.app", "localhost"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "technovasyon.pythonanywhere.com"]
 
 
 # Database credentials
@@ -72,7 +72,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "vercel_app.urls"
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
@@ -90,7 +90,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "vercel_app.wsgi.app"
+WSGI_APPLICATION = "config.wsgi.app"
 
 
 # Database
