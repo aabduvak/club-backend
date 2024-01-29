@@ -43,12 +43,6 @@ DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "technovasyon.pythonanywhere.com"]
 
 
-# Database credentials
-DB_HOST = env("DB_HOST")
-DB_USER = env("DB_USER")
-DB_PASSWORD = env("DB_PASSWORD")
-DB_NAME = env("DB_NAME")
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'drf_yasg',
     "api",
 ]
 
@@ -98,23 +93,12 @@ WSGI_APPLICATION = "config.wsgi.app"
 # Note: Django modules for using databases are not support in serverless
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
-if not IS_LOCAL:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": DB_NAME,
-            "USER": DB_USER,
-            "PASSWORD": DB_PASSWORD,
-            "HOST": DB_HOST,
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": str(BASE_DIR) + "/" + "db.sqlite3",
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": str(BASE_DIR) + "/" + "db.sqlite3",
-        }
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -159,3 +143,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, "files/static")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/files/uploads/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files/uploads")
+
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'smartup.urls.api_info',  # Reference to your API info dictionary
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        },
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization', # Token <value>
+            'in': 'header'
+        }
+    }
+}

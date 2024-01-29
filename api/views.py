@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -20,13 +20,17 @@ class HomeSliderListView(ListAPIView):
     serializer_class = HomeSliderSerializer
 
 
+class HomeSliderRetrieveView(RetrieveAPIView):
+    queryset = HomeSlider.objects.all()
+    serializer_class = HomeSliderSerializer
+
 class BrandListView(ListAPIView):
-    queryset = Brand.objects.all()
+    queryset = Brand.objects.order_by('-created_at')[:4]
     serializer_class = BrandSerializer
 
 
 class FactListView(ListAPIView):
-    queryset = Fact.objects.all()
+    queryset = Fact.objects.order_by('-created_at')[:4]
     serializer_class = FactSerializer
 
 
@@ -58,19 +62,3 @@ class TagListView(ListAPIView):
 class BlogListView(ListAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-
-
-class HomePageView(APIView):
-    def get(self, request):
-        slider = HomeSlider.objects.last()
-        brands = Brand.objects.order_by('-created_at')[:4]
-        facts = Fact.objects.order_by('-created_at')[:4]
-        team = Team.objects.order_by('order')[:3]
-        
-        data = {
-            "slider": HomeSliderSerializer(slider).data,
-            "brands": BrandSerializer(brands, many=True).data,
-            "facts": FactSerializer(facts, many=True).data,
-            "team": TeamSerializer(team, many=True).data
-        }
-        return Response(data)
