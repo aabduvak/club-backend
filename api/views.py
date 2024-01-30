@@ -25,12 +25,12 @@ class HomeSliderRetrieveView(RetrieveAPIView):
     serializer_class = HomeSliderSerializer
 
 class BrandListView(ListAPIView):
-    queryset = Brand.objects.order_by('-created_at')[:4]
+    queryset = Brand.objects.order_by('created_at')
     serializer_class = BrandSerializer
 
 
 class FactListView(ListAPIView):
-    queryset = Fact.objects.order_by('-created_at')[:4]
+    queryset = Fact.objects.order_by('created_at')[:4]
     serializer_class = FactSerializer
 
 
