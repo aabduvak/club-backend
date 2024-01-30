@@ -44,6 +44,18 @@ class MediaSerializer(serializers.ModelSerializer):
             "largeImage",
         ]
 
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        base_url = request.build_absolute_uri('/')[:-1] if request else ''
+        representation = super().to_representation(instance)
+
+        # Update the image fields to include full URLs
+        for field in ['rcImage', 'gridImage', 'largeImage']:
+            if representation.get(field):
+                representation[field] = f"{representation[field]}"
+
+        return representation
+
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,4 +81,4 @@ class BlogSerializer(BaseModelSerializer):
 
     class Meta:
         model = Blog
-        fields = "__all__"
+        exclude = ('body',)

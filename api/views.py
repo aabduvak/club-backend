@@ -74,10 +74,10 @@ class BlogListView(APIView):
         
         queryset = Blog.objects.order_by('-created_at')[:size]
         response = self.serializer_class(queryset, many=True).data
-        
+
         for blog in response:
             media = blog['media']
-            if Media.objects.filter(media=media).exists():
+            if Media.objects.filter(id=media).exists():
                 media = Media.objects.get(id=media)
-                blog['media'] = MediaSerializer(media).data
+                blog['media'] = MediaSerializer(media, context={'request': request}).data
         return Response(response)
