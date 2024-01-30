@@ -15,6 +15,7 @@ from api.serializers import (
     BlogSerializer,
 )
 
+
 class HomeSliderListView(ListAPIView):
     queryset = HomeSlider.objects.all()
     serializer_class = HomeSliderSerializer
@@ -24,18 +25,24 @@ class HomeSliderRetrieveView(RetrieveAPIView):
     queryset = HomeSlider.objects.all()
     serializer_class = HomeSliderSerializer
 
+
 class BrandListView(ListAPIView):
-    queryset = Brand.objects.order_by('created_at')
+    queryset = Brand.objects.order_by("created_at")
     serializer_class = BrandSerializer
 
 
 class FactListView(ListAPIView):
-    queryset = Fact.objects.order_by('created_at')[:4]
+    queryset = Fact.objects.order_by("created_at")[:4]
     serializer_class = FactSerializer
 
 
 class TeamListView(ListAPIView):
     queryset = Team.objects.all()
+    serializer_class = TeamSerializer
+
+
+class TeamShortListView(ListAPIView):
+    queryset = Team.objects.order_by("created_at")[:3]
     serializer_class = TeamSerializer
 
 

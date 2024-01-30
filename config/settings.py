@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    'drf_yasg',
-    'corsheaders',
+    "drf_yasg",
+    "corsheaders",
     "api",
 ]
 
@@ -66,7 +66,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -150,15 +150,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "files/uploads")
 
 
 SWAGGER_SETTINGS = {
-    'DEFAULT_INFO': 'smartup.urls.api_info',  # Reference to your API info dictionary
-    'SECURITY_DEFINITIONS': {
-        'Basic': {
-            'type': 'basic'
+    "DEFAULT_INFO": "smartup.urls.api_info",  # Reference to your API info dictionary
+    "SECURITY_DEFINITIONS": {
+        "Basic": {"type": "basic"},
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",  # Token <value>
+            "in": "header",
         },
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization', # Token <value>
-            'in': 'header'
-        }
-    }
+    },
 }

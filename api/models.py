@@ -39,7 +39,7 @@ class Team(BaseModel):
     photo = models.ImageField(upload_to="team")
     designation = models.CharField(max_length=200)
     order = models.IntegerField(default=0)
-    
+
     def __str__(self) -> str:
         return self.name
 
