@@ -66,6 +66,18 @@ class TagListView(ListAPIView):
     serializer_class = TagSerializer
 
 
-class BlogListView(ListAPIView):
-    queryset = Blog.objects.all()
+class BlogListView(APIView):
     serializer_class = BlogSerializer
+    
+    def get(self, request):
+        size = request.query_params.get("size", 9)
+        
+        queryset = Blog.objects.order_by('-created_at')[:size]
+        response = self.serializer_class(queryset, many=True).data
+        
+        for blog in response:
+            media = blog['media']
+            if Media.objects.filter(media=media).exists():
+                media = Media.objects.get(id=media)
+                blog['media'] = MediaSerializer(media).data
+        return Response(response)
