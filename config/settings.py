@@ -28,7 +28,7 @@ if os.path.isfile(env_file):
     # Use a local secret file, if provided
     env.read_env(env_file)
 
-DEBUG = env("DEBUG", default=True)
+DEBUG = True
 IS_LOCAL = env("IS_LOCAL", default=True)
 
 # Quick-start development settings - unsuitable for production
@@ -36,9 +36,6 @@ IS_LOCAL = env("IS_LOCAL", default=True)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "technovasyon.pythonanywhere.com"]
 
@@ -128,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Istanbul"
 
 USE_I18N = True
 

@@ -2,28 +2,20 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from api.models import HomeSlider, Brand, Fact, Team, Media, Author, Category, Tag, Blog
+from api.models import Slider, Brand, Fact, Team, Event
 from api.serializers import (
-    HomeSliderSerializer,
+    SliderSerializer,
     BrandSerializer,
     FactSerializer,
     TeamSerializer,
-    MediaSerializer,
-    AuthorSerializer,
-    CategorySerializer,
-    TagSerializer,
-    BlogSerializer,
+    EventSerializer
 )
 
 
-class HomeSliderListView(ListAPIView):
-    queryset = HomeSlider.objects.all()
-    serializer_class = HomeSliderSerializer
+class SliderListView(ListAPIView):
+    queryset = Slider.objects.all()
+    serializer_class = SliderSerializer
 
-
-class HomeSliderRetrieveView(RetrieveAPIView):
-    queryset = HomeSlider.objects.all()
-    serializer_class = HomeSliderSerializer
 
 
 class BrandListView(ListAPIView):
@@ -37,7 +29,7 @@ class FactListView(ListAPIView):
 
 
 class TeamListView(ListAPIView):
-    queryset = Team.objects.all()
+    queryset = Team.objects.order_by("order")
     serializer_class = TeamSerializer
 
 
@@ -46,38 +38,14 @@ class TeamShortListView(ListAPIView):
     serializer_class = TeamSerializer
 
 
-class MediaListView(ListAPIView):
-    queryset = Media.objects.all()
-    serializer_class = MediaSerializer
+class EventListView(ListAPIView):
+    queryset = Event.objects.order_by("-created_at")
+    serializer_class = EventSerializer
 
+class MessageCreateView(APIView):
+    def post(self, request):
+        return Response(status=200)
 
-class AuthorListView(ListAPIView):
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-
-
-class CategoryListView(ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-
-class TagListView(ListAPIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
-
-
-class BlogListView(APIView):
-    serializer_class = BlogSerializer
-    
-    def get(self, request):
-        size = request.query_params.get("size", 9)
-        
-        queryset = Blog.objects.order_by('-created_at')[:size]
-        response = self.serializer_class(queryset, many=True).data
-
-        for blog in response:
-            media = blog['media']
-            if Media.objects.filter(id=media).exists():
-                media = Media.objects.get(id=media)
-                blog['media'] = MediaSerializer(media, context={'request': request}).data
-        return Response(response)
+class CollectEmailView(APIView):
+    def post(self, request):
+        return Response(status=200)
