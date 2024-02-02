@@ -1,7 +1,11 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.core.mail import send_mail
+from django.conf import settings
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from api.models import Slider, Brand, Fact, Team, Event, Newsletter, Message
 from api.serializers import (
@@ -58,13 +62,33 @@ class MessageCreateView(APIView):
         message, created = Message.objects.get_or_create(name=name, email=email, content=text)
         if created:
             subject = "New message from technovasyon.com"
-            content = f"""
+            body = f"""
             User: {name}
             Email: {email}
             Message:
             {text}
             """
-            send_mail(subject, content, "technovasyon.com", ["abdulaziz.abduvakhobov@technovasyon.com"])
+
+            sender_email = settings.EMAIL_HOST_USER
+            receiver_email = 'abdulaziz.yosk@gmail.com'
+
+            # Create a MIMEText object
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = receiver_email
+            msg['Subject'] = subject
+            msg.attach(MIMEText(body, 'plain'))
+
+            # SMTP server settings
+            smtp_server = settings.EMAIL_HOST
+            smtp_port = 465  # or 465 for SSL
+
+            # Start a secure SMTP connection
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(sender_email, settings.EMAIL_HOST_PASSWORD)
+                server.sendmail(sender_email, receiver_email, msg.as_string())
+                print('Email sent successfully')
         serializer = MessageSerializer(message)
         return Response(serializer.data)
 
