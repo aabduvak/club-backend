@@ -62,3 +62,19 @@ class Event(BaseModel):
 
     def __str__(self) -> str:
         return self.title
+
+class Newsletter(BaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField()
+    
+    def __str__(self) -> str:
+        return self.email
+
+class Message(BaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField()
+    name = models.CharField(max_length=200)
+    content = models.TextField()
+    
+    def __str__(self) -> str:
+        return self.email
