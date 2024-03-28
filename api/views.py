@@ -66,11 +66,7 @@ class MessageCreateView(APIView):
         message, created = Message.objects.get_or_create(name=name, email=email, content=text)
         if created:
             subject = "New message from technovasyon.com"
-            body = f"""
-            User: {name}
-            Email: {email}
-            Message:\n{text}
-            """
+            body = f"User: {name}\nEmail: {email}\nMessage:\n{text}"
 
             sender_email = settings.EMAIL_HOST_USER
             receiver_email = settings.EMAIL_RECEIVER
@@ -102,27 +98,27 @@ class CollectEmailView(APIView):
 class EventResgistrationView(ListCreateAPIView):
     queryset = EventRegistration.objects.all()
     serializer_class = EventRegistrationSerializer
-    
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        if EventRegistration.objects.exists(email=request.data['email']):
+
+        if EventRegistration.objects.filter(email=request.data['email']).exists():
            instance = EventRegistration.objects.get(email=request.data['email'])
-           serializer = self.get_serializer(data=instance)
+           serializer = self.get_serializer(instance)
            return Response(serializer.data, status=status.HTTP_200_OK)
-         
+
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        
+
         instance = EventRegistration.objects.get(email=request.data['email'])
-        qr_content = f"https://technovasyon.pythonanywhere.com/api/v1/registrations/{instance.id}"
-        filename = f"files/uploads/invitation/{instance.id}.png"
-        
+        qr_content = f"https://technovasyon.com/check-registration?ticket={instance.id}"
+        filename = f"/home/technovasyon/backend/files/uploads/invitation/{instance.id}.png"
+
         generate_qrcode(qr_content, filename)
-        
+
         subject = "TECH24 Zirvesi Biletiniz"
-        body = f"Merhabalar {instance.name}\nTECH24 Zirvesi katılım formunu doldurduğuz için teşekkür ederiz. Zirve günü aşağıdaki QR kod yardımıyla giriş yapabilirsiniz.\n\nGörüşmek üzere Teknoloji ve İnovasyon Topluluğu"
+        body = f"Merhabalar {instance.name}\nTECH24 Zirvesi katılım formunu doldurduğuz için teşekkür ederiz. Zirve günü aşağıdaki QR kod yardımıyla giriş yapabilirsiniz.\n\nZirvede görüşmek üzere!\nTeknoloji ve İnovasyon Topluluğu"
 
         sender_email = settings.EMAIL_HOST_USER
 
@@ -156,3 +152,4 @@ class EventResgistrationView(ListCreateAPIView):
 class GetInvitationDetailsView(RetrieveAPIView):
     queryset = EventRegistration.objects.all()
     serializer_class = EventRegistrationSerializer
+    lookup_field = "id"
