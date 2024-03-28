@@ -55,7 +55,7 @@ class MessageCreateView(APIView):
         name = request.data.get('name', '')
         email = request.data.get('email', '')
         text = request.data.get('message', '')
-        
+
         if not name or not email or not text:
             return Response({"status":"error", "message": "invalid input"}, status=400)
 
@@ -65,12 +65,11 @@ class MessageCreateView(APIView):
             body = f"""
             User: {name}
             Email: {email}
-            Message:
-            {text}
+            Message:\n{text}
             """
 
             sender_email = settings.EMAIL_HOST_USER
-            receiver_email = 'abdulaziz.yosk@gmail.com'
+            receiver_email = settings.EMAIL_RECEIVER
 
             # Create a MIMEText object
             msg = MIMEMultipart()
@@ -84,16 +83,14 @@ class MessageCreateView(APIView):
             smtp_port = 465  # or 465 for SSL
 
             # Start a secure SMTP connection
-            with smtplib.SMTP(smtp_server, smtp_port) as server:
-                server.starttls()
-                server.login(sender_email, settings.EMAIL_HOST_PASSWORD)
-                server.sendmail(sender_email, receiver_email, msg.as_string())
-                print('Email sent successfully')
+            server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+            server.login(sender_email, settings.EMAIL_HOST_PASSWORD)
+            server.sendmail(sender_email, receiver_email, msg.as_string())
         serializer = MessageSerializer(message)
         return Response(serializer.data)
 
 class CollectEmailView(APIView):
     serializer_class = NewsLetterSerializer
-    
+
     def post(self, request):
         return Response(status=200)
