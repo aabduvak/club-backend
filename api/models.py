@@ -78,3 +78,12 @@ class Message(BaseModel):
     
     def __str__(self) -> str:
         return self.email
+
+class EventRegistration(BaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    education = models.CharField(max_length=255)
+    
+    def __str__(self) -> str:
+        return f"{self.name} | {self.email}"

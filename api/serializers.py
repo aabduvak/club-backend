@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from api.models import Slider, Brand, Fact, Team, Event, Newsletter, Message
-
+from api.models import Slider, Brand, Fact, Team, Event, Newsletter, Message, EventRegistration
 
 class BaseModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,4 +43,9 @@ class MessageSerializer(BaseModelSerializer):
 class NewsLetterSerializer(BaseModelSerializer):
     class Meta:
         model = Newsletter
+        fields = "__all__"
+
+class EventRegistrationSerializer(BaseModelSerializer):
+    class Meta:
+        model = EventRegistration
         fields = "__all__"

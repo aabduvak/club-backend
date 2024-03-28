@@ -7,7 +7,8 @@ from api.views import (
     EventListView,
     TeamShortListView,
     MessageCreateView,
-    CollectEmailView
+    CollectEmailView,
+	EventResgistrationView
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path("message", MessageCreateView.as_view(), name="send-message"),
     path("events", EventListView.as_view(), name="event-list"),
     path("newsletter", CollectEmailView.as_view(), name="newslatter-collect"),
+	path("registrations", EventResgistrationView.as_view(), name="event-registration"),
 ]

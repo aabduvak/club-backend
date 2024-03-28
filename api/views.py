@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
@@ -7,7 +7,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from api.models import Slider, Brand, Fact, Team, Event, Newsletter, Message
+from api.models import Slider, Brand, Fact, Team, Event, Newsletter, Message, EventRegistration
 from api.serializers import (
     SliderSerializer,
     BrandSerializer,
@@ -15,15 +15,14 @@ from api.serializers import (
     TeamSerializer,
     EventSerializer,
     MessageSerializer,
-    NewsLetterSerializer
+    NewsLetterSerializer,
+    EventRegistrationSerializer
 )
 
 
 class SliderListView(ListAPIView):
     queryset = Slider.objects.all()
     serializer_class = SliderSerializer
-
-
 
 class BrandListView(ListAPIView):
     queryset = Brand.objects.order_by("created_at")
@@ -94,3 +93,8 @@ class CollectEmailView(APIView):
 
     def post(self, request):
         return Response(status=200)
+
+class EventResgistrationView(ListCreateAPIView):
+    queryset = EventRegistration.objects.all()
+    serializer_class = EventRegistrationSerializer
+
